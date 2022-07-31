@@ -1,4 +1,4 @@
-import styles from '../styles/banner.module.css'
+import styles from './banner.module.css'
 
 const Banner = (props) => {
   return (
@@ -8,7 +8,9 @@ const Banner = (props) => {
         <span className={styles.title2}>Connoisseur</span>
       </h1>
       <p className={styles.subTitle}>Discover your local coffee shop</p>
-      <button className={styles.button} onClick={props.handleOnClick}>{props.buttonText}</button>
+      <div className={styles.buttonWrapper}>
+        <button className={styles.button} onClick={props.handleOnClick}>{props.buttonText}</button>
+      </div>
     </div>
   )
 
