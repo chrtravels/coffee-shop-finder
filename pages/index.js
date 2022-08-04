@@ -8,10 +8,26 @@ import Card from '../components/card'
 // Prerender coffeeStores and prerender with getStaticProps
 import coffeeStoresData from '../data/coffee-stores.json'
 
+
 export async function getStaticProps(context) {
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Authorization: 'fsq3KuOdSnYpgAmQg47Kn+TJzI3dfmyaDbTvErsnDQ8CPAo='
+    }
+  };
+
+  const response = await fetch('https://api.foursquare.com/v3/places/search?query=coffee&ll=43.65115438290401%2C-79.37832859616533&limit=6', options)
+
+  const data = await response.json();
+
+  // .catch(err => console.error(err));
+
   return {
     props: {
-      coffeeStores: coffeeStoresData,
+      coffeeStores: data.results,
     }, // will be passed to the page component as props. We don't have to fetch it as we already have the data
   }
 }
@@ -45,7 +61,7 @@ export default function Home(props) {
                   <Card
                     key={coffeeStore.id}
                     name={coffeeStore.name}
-                    imgUrl={coffeeStore.imgUrl}
+                    imgUrl={coffeeStore.imgUrl || '/static/coffee-bg.jpeg'}
                     href={`/coffee-store/${coffeeStore.id}`}
                     className={styles.card}
                   />
