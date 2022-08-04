@@ -5,26 +5,32 @@ import Image from 'next/image';
 import cls from 'classnames';
 
 import coffeeStoresData from '../../data/coffee-stores.json';
+import { fetchCoffeeStores } from '../../lib/coffee-stores';
 
 import styles from '../../styles/coffee-store.module.css';
 
 
-export function getStaticProps(staticProps) {
+export async function getStaticProps(staticProps) {
   const params = staticProps.params;
+  console.log('staticProps', staticProps)
+  const coffeeStores = await fetchCoffeeStores();
+
+
   return {
     props: {
-      coffeeStore: coffeeStoresData.find(coffeeStore => {
-        return coffeeStore.id.toString() === params.id // dynamic id
+      coffeeStore: coffeeStores.find(coffeeStore => {
+        return coffeeStore.fsq_id.toString() === params.id // dynamic id
       }),
     },
   };
 }
 
-export function getStaticPaths() {
-  const paths = coffeeStoresData.map(coffeeStore => {
+export async function getStaticPaths() {
+  const coffeeStores = await fetchCoffeeStores();
+  const paths = coffeeStores.map(coffeeStore => {
     return  {
       params: {
-        id: coffeeStore.id.toString(),
+        id: coffeeStore.fsq_id.toString(),
       },
     }
   })
@@ -63,7 +69,7 @@ const CoffeeStore = (props) => {
             <div className={styles.nameWrapper}>
               <h1 className={styles.name}>{name}</h1>
             </div>
-            <Image src={imgUrl} width={600} height={360} className={styles.storeImg} alt={name}>
+            <Image src={imgUrl || '/static/coffee-bg.jpeg'} width={600} height={360} className={styles.storeImg} alt={name}>
             </Image>
           </div>
 
