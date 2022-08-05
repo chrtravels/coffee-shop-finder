@@ -51,7 +51,7 @@ export default function Home(props) {
                     key={coffeeStore.id}
                     name={coffeeStore.name}
                     imgUrl={coffeeStore.imgUrl || '/static/coffee-bg.jpeg'}
-                    href={`/coffee-store/${coffeeStore.fsq_id}`}
+                    href={`/coffee-store/${coffeeStore.id}`}
                     className={styles.card}
                   />
                 )
