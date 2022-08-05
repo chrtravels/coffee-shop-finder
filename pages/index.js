@@ -42,12 +42,12 @@ export default function Home(props) {
 
       <main className={styles.main}>
         <Banner buttonText={isFindingLocation ? "Locating..." : "View stores nearby"} handleOnClick={handleOnBannerBtnClick} />
-        Something went wrong: {locationErrorMsg}
+        {locationErrorMsg && <p>Something went wrong: {locationErrorMsg}</p>}
         <div className={styles.heroImage}>
           <Image src="/static/hero-image.png" width={700} height={400} />
         </div>
         {props.coffeeStores.length > 0 && (
-          <>
+          <div className={styles.sectionWrapper}>
             <h2 className={styles.heading2}>Toronto Stores</h2>
             <div className={styles.cardLayout}>
               {/* Mapping through coffeeStores from the getStaticProps */}
@@ -63,7 +63,7 @@ export default function Home(props) {
                 )
               })}
             </div>
-          </>
+          </div>
         )}
       </main>
     </div>
