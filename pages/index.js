@@ -8,6 +8,7 @@ import Card from '../components/card'
 // Prerender coffeeStores and prerender with getStaticProps
 import coffeeStoresData from '../data/coffee-stores.json'
 import { fetchCoffeeStores } from '../lib/coffee-stores';
+import useTrackLocation from '../hooks/use-track-location';
 
 
 export async function getStaticProps(context) {
@@ -23,8 +24,12 @@ export async function getStaticProps(context) {
 
 export default function Home(props) {
 
+  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } = useTrackLocation();
+
+  console.log({ latLong, locationErrorMsg });
+
   const handleOnBannerBtnClick = () => {
-    console.log('hi banner button');
+    handleTrackLocation();
   }
 
   return (
@@ -36,7 +41,8 @@ export default function Home(props) {
       </Head>
 
       <main className={styles.main}>
-        <Banner buttonText="View stores nearby" handleOnClick={handleOnBannerBtnClick} />
+        <Banner buttonText={isFindingLocation ? "Locating..." : "View stores nearby"} handleOnClick={handleOnBannerBtnClick} />
+        Something went wrong: {locationErrorMsg}
         <div className={styles.heroImage}>
           <Image src="/static/hero-image.png" width={700} height={400} />
         </div>
