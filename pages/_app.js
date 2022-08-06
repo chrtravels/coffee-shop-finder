@@ -3,9 +3,9 @@ import Layout from '../components/layout';
 
 import '../styles/globals.css'
 
-const StoreContext = createContext();
+export const StoreContext = createContext();
 
-const ACTION_TYPES = {
+export const ACTION_TYPES = {
   SET_LAT_LONG: 'SET_LAT_LONG',
   SET_COFFEE_STORES: 'SET_COFFEE_STORES'
 }

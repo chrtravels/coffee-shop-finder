@@ -1,3 +1,4 @@
+import { useContext, useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -15,11 +16,12 @@ export async function getStaticProps(staticProps) {
   console.log('staticProps', staticProps)
 
   const coffeeStores = await fetchCoffeeStores();
+
   const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
     return coffeeStore.id.toString() === params.id // dynamic id
   })
 
-
+  // If it finds a dynamic route, return the coffee store, otherwise return empty object
   return {
     props: {
       coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {}
@@ -43,14 +45,18 @@ export async function getStaticPaths() {
   };
 }
 
-const CoffeeStore = (props) => {
+const CoffeeStore = (initialProps) => {
   const router = useRouter();
+
+  const [coffeeStore, setCoffeeStore] = useState(
+    initialProps.coffeeStore || {}
+  );
 
   if (router.isFallback) {
     return <div>Loading...</div>
   }
 
-  const { name, address, neighborhood, imgUrl } = props.coffeeStore;
+  const { name, address, neighborhood, imgUrl } = coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("handle Upvote");
