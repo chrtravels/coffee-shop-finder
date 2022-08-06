@@ -5,10 +5,12 @@ import Head from 'next/head';
 import Image from 'next/image';
 import cls from 'classnames';
 
-import coffeeStoresData from '../../data/coffee-stores.json';
+import styles from '../../styles/coffee-store.module.css';
 import { fetchCoffeeStores } from '../../lib/coffee-stores';
 
-import styles from '../../styles/coffee-store.module.css';
+import { StoreContext } from "../_app";
+
+import { isEmpty } from "../../utils";
 
 
 export async function getStaticProps(staticProps) {
@@ -47,14 +49,31 @@ export async function getStaticPaths() {
 
 const CoffeeStore = (initialProps) => {
   const router = useRouter();
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
+
+  const id = router.query.id;
 
   const [coffeeStore, setCoffeeStore] = useState(
     initialProps.coffeeStore || {}
   );
 
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
+  const {
+    state: { coffeeStores }
+  } = useContext(StoreContext)
+
+  useEffect(() => {
+    if (isEmpty(initialProps.coffeeStore)) {
+      if (coffeeStores.length > 0) {
+        const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
+          return coffeeStore.id.toString() === id // dynamic id
+        });
+        setCoffeeStore(findCoffeeStoreById);
+      }
+    }
+  }, [id]);
+
 
   const { name, address, neighborhood, imgUrl } = coffeeStore;
 
