@@ -14,7 +14,7 @@ import { ACTION_TYPES, StoreContext } from '../context/store-context';
 
 
 export async function getStaticProps(context) {
-
+ // Best practice to fetch directly on server side and fetch from the api on client side
  const coffeeStores = await fetchCoffeeStores();
 
   return {
