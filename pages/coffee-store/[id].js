@@ -98,10 +98,13 @@ const CoffeeStore = (initialProps) => {
           setCoffeeStore(findCoffeeStoreById);
           handleCreateCoffeeStore(findCoffeeStoreById);
         }
-
       }
+    } else {
+      // Statically generated route (SSG)
+      // Creating the coffee store from getStaticProps instead of Context
+      handleCreateCoffeeStore(initialProps.coffeeStore);
     }
-  }, [id]);
+  }, [id, initialProps, initialProps.coffeeStore]);
 
   const { name, address, neighborhood, imgUrl } = coffeeStore;
 
