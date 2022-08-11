@@ -41,7 +41,6 @@ export async function getStaticPaths() {
   });
   return {
     paths,
-    // fallback true is very helpful if you have a lot of pages
     fallback: true,
   };
 }
@@ -80,7 +79,7 @@ const CoffeeStore = (initialProps) => {
         }),
       });
 
-      const dbCoffeeStore = response.json();
+      const dbCoffeeStore = await response.json();
       console.log(dbCoffeeStore);
     } catch (err) {
       console.error("Error creating coffee store", err);
@@ -108,8 +107,13 @@ const CoffeeStore = (initialProps) => {
 
   const { name, address, neighborhood, imgUrl } = coffeeStore;
 
+  // Implementing and setting voting count
+  const [votingCount, setVotingCount] = useState(0);
+
   const handleUpvoteButton = () => {
     console.log("handle Upvote");
+    let count = votingCount + 1;
+    setVotingCount(count);
   };
 
   return (
@@ -151,7 +155,7 @@ const CoffeeStore = (initialProps) => {
           )}
           <div className={styles.iconWrapper}>
             <Image src="/static/icons/star.svg" width="24" height="24" />
-            <p className={styles.text}>1</p>
+            <p className={styles.text}>{votingCount}</p>
           </div>
 
           <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
