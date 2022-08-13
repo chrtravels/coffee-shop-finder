@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
+
+import useSWR from "swr";
+
 import cls from "classnames";
 
 import styles from "../../styles/coffee-store.module.css";
@@ -10,11 +13,10 @@ import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
 import { StoreContext } from "../../context/store-context";
 
-import { isEmpty } from "../../utils";
+import { fetcher, isEmpty } from "../../utils";
 
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
-  console.log("staticProps", staticProps);
 
   const coffeeStores = await fetchCoffeeStores();
 
@@ -105,16 +107,35 @@ const CoffeeStore = (initialProps) => {
     }
   }, [id, initialProps, initialProps.coffeeStore]);
 
-  const { name, address, neighborhood, imgUrl } = coffeeStore;
+  const {
+    name = "",
+    address = "",
+    neighborhood = "",
+    imgUrl = ""
+  } = coffeeStore;
 
   // Implementing and setting voting count
   const [votingCount, setVotingCount] = useState(0);
+
+  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      console.log('data from SWR', data);
+      setCoffeeStore(data[0]);
+      setVotingCount(data[0].voting);
+    }
+  }, [data]);
 
   const handleUpvoteButton = () => {
     console.log("handle Upvote");
     let count = votingCount + 1;
     setVotingCount(count);
   };
+
+  if (error) {
+    return <div>Something went wrong retrieving coffee store page</div>;
+  }
 
   return (
     <div className={styles.layout}>
