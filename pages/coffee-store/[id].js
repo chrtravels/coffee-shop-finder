@@ -82,7 +82,7 @@ const CoffeeStore = (initialProps) => {
       });
 
       const dbCoffeeStore = await response.json();
-      console.log(dbCoffeeStore);
+
     } catch (err) {
       console.error("Error creating coffee store", err);
     }
@@ -121,14 +121,12 @@ const CoffeeStore = (initialProps) => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      console.log('data from SWR', data);
       setCoffeeStore(data[0]);
       setVotingCount(data[0].voting);
     }
   }, [data]);
 
   const handleUpvoteButton = async () => {
-    console.log("handle Upvote");
 
     try {
       const response = await fetch("/api/favoriteCoffeeStoreById", {
@@ -142,7 +140,6 @@ const CoffeeStore = (initialProps) => {
       });
 
       const dbCoffeeStore = await response.json();
-      console.log(dbCoffeeStore);
 
       if (dbCoffeeStore && dbCoffeeStore.length > 0) {
         let count = votingCount + 1;
